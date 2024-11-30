@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const darkGray = "#f3f3f3"
+const lightGray = "#F7F8F9FF"
 
 export default {
   content: [
@@ -19,6 +20,7 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         darkGray: darkGray,
+        lightGray: lightGray,
       },
     },
   },

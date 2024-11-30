@@ -1,23 +1,63 @@
-import React from 'react';
-import {Button} from "@/components";
+import React, {useState} from 'react';
+import {Button, AddEditForm} from "@/components";
+import {MenuItem} from "@/types";
+import { useDispatch } from 'react-redux';
+import { addSubMenuItem, removeMenuItem, updateMenuItem } from '@/redux/slices/menuSlice';
 
 interface MenuItemContent {
-  item: {
-    id: number;
-    name: string;
-    link: string;
-    subItems: { id: number; name: string; link: string }[];
-  };
-  isEditing: boolean;
-  handleEdit: () => void;
+  item: MenuItem;
 }
 
 const MenuItemContent = (props: MenuItemContent) => {
+  const dispatch = useDispatch();
   const {
-    item,
-    isEditing,
-    handleEdit,
+    item
   } = props;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [isAddingSubItem, setIsAddingSubItem] = useState(false);
+
+  const handleEdit = () => setIsEditing(prevState => !prevState);
+  const handleAdd = () => setIsAddingSubItem(prevState => !prevState);
+
+  const handleSave = (updatedData: { name: string; link: string }) => {
+    const updatedItem: MenuItem = {
+      ...item,
+      name: updatedData.name,
+      link: updatedData.link,
+    };
+
+    // Find which array contains this item
+    const findArrayIndex = (items: MenuItem[][]): number => {
+      for (let i = 0; i < items.length; i++) {
+        const found = items[i].some(menuItem => menuItem.id === item.id);
+        if (found) return i;
+      }
+      return 0;
+    };
+
+    dispatch(updateMenuItem({ 
+      item: updatedItem, 
+      id: item.id 
+    }));
+    setIsEditing(false);
+  };
+
+  const handleAddSubItem = (formData: { name: string; link: string }) => {
+    const newSubItem: MenuItem = {
+      id: Date.now(),
+      name: formData.name,
+      link: formData.link,
+      subItems: []
+    };
+    
+    dispatch(addSubMenuItem({ parentId: item.id, newItem: newSubItem }));
+    setIsAddingSubItem(false);
+  };
+
+  const handleDelete = () => {
+    dispatch(removeMenuItem({ id: item.id }));
+  };
 
   return (
     <li className="rounded">
@@ -36,38 +76,32 @@ const MenuItemContent = (props: MenuItemContent) => {
           </Button>
           <Button
             variant={'grey'}
-            onClick={handleEdit}
+            onClick={handleDelete}
             position={'center'}
           >
             {'Delete'}
           </Button>
           <Button
             variant={'grey'}
-            onClick={handleEdit}
+            onClick={() => setIsAddingSubItem(true)}
             position={'right'}
           >
-            {'Add menu item'}
+            {'Add menu item lower level'}
           </Button>
         </div>
       </div>
       {isEditing && (
-        <div className="mt-4">
-          <input
-            type="text"
-            placeholder="Nazwa"
-            className="border p-2 rounded w-full mb-2"
-            defaultValue={item.name}
-          />
-          <input
-            type="text"
-            placeholder="Link"
-            className="border p-2 rounded w-full mb-2"
-            defaultValue={item.link}
-          />
-          <button className="bg-purple-600 text-white py-2 px-4 rounded">
-            Save
-          </button>
-        </div>
+        <AddEditForm
+          initialData={item}
+          onSave={handleSave}
+          onCancel={handleEdit}
+        />
+      )}
+      {isAddingSubItem && (
+        <AddEditForm
+          onSave={handleAddSubItem}
+          onCancel={handleAdd}
+        />
       )}
       {Array.isArray(item.subItems) && item.subItems.length > 0 && (
         <ul className={'pl-4'}>
@@ -75,8 +109,6 @@ const MenuItemContent = (props: MenuItemContent) => {
             <MenuItemContent
               key={sub.id}
               item={sub}
-              isEditing={isEditing}
-              handleEdit={handleEdit}
             />
           ))}
         </ul>

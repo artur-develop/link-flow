@@ -1,0 +1,1 @@
+export const linkPattern = /^(?!.*[\s\x20])(?!.*\s)(?!.*@)(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#\[\]@!$&'()*+,;=]*)?$/;

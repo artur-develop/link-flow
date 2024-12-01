@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@/components';
+import { texts } from '@/constants';
 
 interface ConfirmDialogProps {
   message: string;
@@ -18,14 +19,14 @@ const ConfirmDialog = ({ message, onConfirm, onCancel }: ConfirmDialogProps) => 
             onClick={onCancel}
             position="left"
           >
-            No
+            {texts.confirmDialog.buttons.no}
           </Button>
           <Button
             variant="grey"
             onClick={onConfirm}
             position="right"
           >
-            Yes
+            {texts.confirmDialog.buttons.yes}
           </Button>
         </div>
       </div>

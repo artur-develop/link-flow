@@ -3,3 +3,4 @@ export * from './MenuItem';
 export * from './Button';
 export * from './AddEditForm';
 export * from './GeneralAdd';
+export * from './ConfirmDialog';

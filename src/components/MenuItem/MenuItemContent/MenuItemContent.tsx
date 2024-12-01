@@ -3,6 +3,8 @@ import {Button, AddEditForm} from "@/components";
 import {MenuItem} from "@/types";
 import { useDispatch } from 'react-redux';
 import { addSubMenuItem, removeMenuItem, updateMenuItem } from '@/redux/slices/menuSlice';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface MenuItemContent {
   item: MenuItem;
@@ -25,15 +27,6 @@ const MenuItemContent = (props: MenuItemContent) => {
       ...item,
       name: updatedData.name,
       link: updatedData.link,
-    };
-
-    // Find which array contains this item
-    const findArrayIndex = (items: MenuItem[][]): number => {
-      for (let i = 0; i < items.length; i++) {
-        const found = items[i].some(menuItem => menuItem.id === item.id);
-        if (found) return i;
-      }
-      return 0;
     };
 
     dispatch(updateMenuItem({ 
@@ -59,9 +52,21 @@ const MenuItemContent = (props: MenuItemContent) => {
     dispatch(removeMenuItem({ id: item.id }));
   };
 
+  const {attributes, listeners, setNodeRef, transition, transform} = useSortable({id: item.id});
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform)
+  };
+
   return (
-    <li className="rounded">
-      <div className="bg-white p-4 flex justify-between items-center border">
+    <li className="rounded-t-lg">
+      <div
+        className="bg-white p-4 flex justify-between items-center border rounded-t-lg bg-orange-100"
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+      >
         <div className="flex flex-col gap-1">
           <p className="text-sm font-medium">{item.name}</p>
           <p className="text-xs text-gray-500">{item.link}</p>
@@ -90,6 +95,7 @@ const MenuItemContent = (props: MenuItemContent) => {
           </Button>
         </div>
       </div>
+
       {isEditing && (
         <AddEditForm
           initialData={item}
@@ -104,7 +110,7 @@ const MenuItemContent = (props: MenuItemContent) => {
         />
       )}
       {Array.isArray(item.subItems) && item.subItems.length > 0 && (
-        <ul className={'pl-4'}>
+        <ul className='pl-4'>
           {item.subItems.map((sub) => (
             <MenuItemContent
               key={sub.id}

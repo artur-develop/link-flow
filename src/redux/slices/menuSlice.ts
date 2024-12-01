@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MenuItem } from '@/types';
+import { arrayMove } from '@dnd-kit/sortable';
 
 type MenuState = {
   items: MenuItem[][];
@@ -16,14 +17,36 @@ const initialSt: MenuItem[][] = [[
       id: 2,
       name: "About",
       link: "/about",
-      subItems: [
-          {
-              id: 3,
-              name: "Our Team",
-              link: "/about/team",
-              subItems: []
-          },
-      ]
+      subItems: [{
+        id: 2412411241243331,
+        name: "myself",
+        link: "/myself",
+        subItems: []
+      }]
+  },
+  {
+    id: Date.now() + 5,
+    name: "Poker",
+    link: "/Poker",
+    subItems: []
+  },
+  {
+    id: Date.now() + 3,
+    name: "Football",
+    link: "/Football",
+    subItems: []
+  },
+  {
+    id: Date.now() + 2,
+    name: "1x1",
+    link: "/1x1",
+    subItems: []
+  },
+  {
+    id: Date.now() + 1,
+    name: "2x2",
+    link: "/2x2",
+    subItems: []
   },
   ],[
   {
@@ -58,22 +81,7 @@ const initialSt: MenuItem[][] = [[
       link: "/contact",
       subItems: []
   },
-    // here appears new item if I press on button 'Add menu item same level'that not related to the first array.
-  // { 
-  //   id: ,
-  //   name: ,
-  //   link: ,
-  //   subItems:[]
-  // }
-],
-  // here appears new item if I press on button 'Add menu item same level' related to the first array.
-  // [{ 
-  //   id: ,
-  //   name: ,
-  //   link: ,
-  //   subItems:[]
-  // }]
-]
+]]
 
 const initialState: MenuState = {
   items: initialSt
@@ -159,9 +167,79 @@ const menuSlice = createSlice({
       state.items.forEach(itemArray => {
         addSubItem(itemArray);
       });
+    },
+    reorderItems: (state, action: PayloadAction<{ 
+      activeId: number, 
+      overId: number, 
+      arrayIndex: number,
+      asChild: boolean 
+    }>) => {
+      const { activeId, overId, asChild } = action.payload;
+      
+      // Helper function to find and remove an item from the tree
+      const findAndRemoveItem = (items: MenuItem[]): [MenuItem | null, MenuItem[]] => {
+        let foundItem: MenuItem | null = null;
+        const newItems = items.filter(item => {
+          if (item.id === activeId) {
+            foundItem = { ...item };
+            return false;
+          }
+          if (item.subItems.length > 0) {
+            const [found, newSubItems] = findAndRemoveItem(item.subItems);
+            if (found) {
+              foundItem = found;
+              item.subItems = newSubItems;
+            }
+          }
+          return true;
+        });
+        return [foundItem, newItems];
+      };
+
+      // Helper function to insert item at the correct position
+      const insertItem = (items: MenuItem[], draggedItem: MenuItem, targetId: number): boolean => {
+        // Check if we should insert into this level
+        const targetIndex = items.findIndex(item => item.id === targetId);
+        if (targetIndex !== -1) {
+          // Insert as a child of the target
+          items[targetIndex].subItems.push(draggedItem);
+          return true;
+        }
+
+        // Check nested levels
+        for (const item of items) {
+          if (insertItem(item.subItems, draggedItem, targetId)) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      // Find and remove the dragged item
+      let [draggedItem, newItems] = findAndRemoveItem(state.items[action.payload.arrayIndex]);
+      
+      if (draggedItem) {
+        if (asChild) {
+          // Insert as a child
+          const inserted = insertItem(newItems, draggedItem, overId);
+          if (!inserted) {
+            newItems.push(draggedItem);
+          }
+        } else {
+          // Insert as a sibling
+          const targetIndex = newItems.findIndex(item => item.id === overId);
+          if (targetIndex !== -1) {
+            newItems.splice(targetIndex + 1, 0, draggedItem);
+          } else {
+            newItems.push(draggedItem);
+          }
+        }
+        
+        state.items[action.payload.arrayIndex] = newItems;
+      }
     }
   }
 });
 
-export const { addMenuItem, removeMenuItem, updateMenuItem, addSubMenuItem } = menuSlice.actions;
+export const { addMenuItem, removeMenuItem, updateMenuItem, addSubMenuItem, reorderItems } = menuSlice.actions;
 export default menuSlice.reducer; 

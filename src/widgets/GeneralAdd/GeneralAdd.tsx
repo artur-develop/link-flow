@@ -1,10 +1,11 @@
 'use client'
 
-import {useState} from "react";
-import {useSelector, useDispatch} from 'react-redux';
-import {Button, AddEditForm} from "@/components";
-import {RootState} from "@/redux/store";
-import {CreateItemT} from "@/types";
+import { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { Button } from "@/components";
+import { AddEditForm } from "@/widgets";
+import { RootState } from "@/redux/store";
+import { CreateItemT } from "@/types";
 import { PlusCircledIcon } from "@/assets";
 import { texts } from '@/constants';
 
@@ -79,4 +80,4 @@ const GeneralAdd = () => {
   );
 };
 
-export {GeneralAdd}; 
+export { GeneralAdd };

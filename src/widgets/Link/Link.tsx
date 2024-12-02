@@ -6,8 +6,9 @@ import {
   SimpleTreeItemWrapper,
   TreeItemComponentProps,
 } from 'dnd-kit-sortable-tree';
-import {AddEditForm, Button, ConfirmDialog} from "@/components";
-import {useDispatch} from 'react-redux';
+import { Button, ConfirmDialog } from "@/components";
+import { AddEditForm } from "@/widgets"
+import {useDispatch } from 'react-redux';
 import { addSubItem, deleteMenuItem, editMenuItem } from '@/redux/slices/linkSlice';
 import { goToLink } from '@/utils';
 import { texts } from '@/constants';

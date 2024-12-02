@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic'
 
 const ContentWithNoSSR = dynamic(
-  () => import('@/templates').then((mod) => ({ default: mod.Home })),
+  () => import('@/templates').then((mod) => ({ default: mod.HomeTemplate })),
   { ssr: false }
 )
 

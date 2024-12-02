@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { GeneralAdd, List } from "@/widgets";
 
-const Home = () => {
+const HomeTemplate = () => {
   const itemArrays = useSelector((state: RootState) => state.links);
 
   return (
@@ -21,4 +21,4 @@ const Home = () => {
   );
 };
 
-export { Home };
+export { HomeTemplate };

@@ -65,10 +65,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 ## Project Structure
 
 ```
-link-flow/
-├── .next/              # Next.js build output
-├── node_modules/       # Project dependencies
-├── public/            # Static assets
+link-flow/        
 ├── src/
 │   ├── app/          # Next.js app router files
 │   │   ├── layout.tsx
@@ -91,14 +88,6 @@ link-flow/
 │       ├── GeneralAdd/
 │       ├── Link/
 │       └── List/
-├── .eslintrc.json    # ESLint configuration
-├── .gitignore        # Git ignore rules
-├── .npmrc            # NPM configuration
-├── next.config.ts    # Next.js configuration
-├── next-env.d.ts     # Next.js TypeScript declarations
-├── package.json      # Project dependencies and scripts
-├── package-lock.json # Dependency lock file
-└── postcss.config.mjs # PostCSS configuration
 ```
 
 ## Deployment

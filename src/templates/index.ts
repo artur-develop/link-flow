@@ -1,1 +1,1 @@
-export * from './ContentIndexTemplate';
+export * from './HomeTemplate';

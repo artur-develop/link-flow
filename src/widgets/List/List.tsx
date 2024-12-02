@@ -1,9 +1,10 @@
 'use client'
 
-import React, {useState} from 'react';
-import {AddEditForm, Button, Link} from "@/components";
-import {CreateItemT, Menu, MenuItem as MenuItemT} from "@/types";
-import {SortableTree} from 'dnd-kit-sortable-tree';
+import React, { useState } from 'react';
+import { Button } from "@/components";
+import { AddEditForm, Link } from "@/widgets";
+import { CreateItemT, Menu, MenuItem as MenuItemT } from "@/types";
+import { SortableTree } from 'dnd-kit-sortable-tree';
 import { updateMenuItems, addMenuItem } from '@/redux/slices/linkSlice';
 import { useDispatch } from 'react-redux';
 import { PointerSensor } from '@dnd-kit/core';

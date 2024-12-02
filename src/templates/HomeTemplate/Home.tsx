@@ -3,9 +3,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { GeneralAdd, List } from "@/components";
+import { GeneralAdd, List } from "@/widgets";
 
-const Content = () => {
+const Home = () => {
   const itemArrays = useSelector((state: RootState) => state.links);
 
   return (
@@ -21,4 +21,4 @@ const Content = () => {
   );
 };
 
-export { Content };
+export { Home };

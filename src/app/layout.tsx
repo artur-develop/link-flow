@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import '@/styles/globals.css'
 import {ReactNode} from "react";
+import {ClientProviders} from "@/providers";
 
 export const metadata: Metadata = {
   title: "Link flow application",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={'antialiased'}>
-        {children}
+        <ClientProviders>
+          {children}
+        </ClientProviders>
       </body>
     </html>
   );

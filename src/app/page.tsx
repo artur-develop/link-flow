@@ -1,12 +1,11 @@
-'use client';
+'use client'
+import dynamic from 'next/dynamic'
 
-import { Provider } from 'react-redux';
-import { store } from "@/redux/store";
-import {Content} from "@/templates";
+const ContentWithNoSSR = dynamic(
+  () => import('@/templates').then((mod) => ({ default: mod.Content })),
+  { ssr: false }
+)
 
-export default function Home () {
-  return <Provider store={store}>
-    <Content/>
-  </Provider>;
-};
-
+export default function Home() {
+  return <ContentWithNoSSR />
+}

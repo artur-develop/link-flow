@@ -153,4 +153,6 @@ const Link = React.forwardRef<
   );
 });
 
+Link.displayName = 'Link';
+
 export {Link};
